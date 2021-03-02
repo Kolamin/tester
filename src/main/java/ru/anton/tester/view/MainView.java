@@ -12,14 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MainView extends VerticalLayout {
 
 
-    //QuestionForm questionForm;
-
-
     @Autowired
     public MainView() {
-        // this.questionForm = questionForm;
-
-
 
         Div menu = new Div();
 

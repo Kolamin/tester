@@ -8,12 +8,14 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,7 @@ import java.util.List;
 
 @Route(value = "question")
 @Component
-@Scope("prototype")
+@UIScope
 @PageTitle("Tester")
 public class QuestionForm extends VerticalLayout {
 
@@ -41,7 +43,7 @@ public class QuestionForm extends VerticalLayout {
     Button btnNextQuestion;
     H3 nameQuestion;
     RadioButtonGroup<String> radioTestOptions;
-    private  long ID = 1;
+    private long ID = 1;
 
 
     @Autowired
@@ -54,7 +56,6 @@ public class QuestionForm extends VerticalLayout {
         btnNextQuestion = new Button("Следующий вопрос");
 
 
-
         allQuestion = questionRepository.findAll();
 
 
@@ -62,19 +63,22 @@ public class QuestionForm extends VerticalLayout {
 
         btnAnswer.addClickListener(e -> getCorrectAnswer());
 
-        btnAbort.addClickListener(e->{
-            UI.getCurrent().navigate(MainView.class);
+        btnAbort.addClickListener(e -> {
+            UI.getCurrent()
+                    .navigate(MainView.class);
         });
 
         add(createQuestionLayout(ID), createButtonLayout());
 
 
-        btnNextQuestion.addClickListener(e->next());
+        btnNextQuestion.addClickListener(e -> next());
 
     }
 
     private void getCorrectAnswer() {
-        if(correctAnswerRepository.findById(ID).getCorrectAnswer().equals(radioTestOptions.getValue())){
+        if (correctAnswerRepository.findById(ID)
+                .getCorrectAnswer()
+                .equals(radioTestOptions.getValue())) {
             Notification correctNotice = new Notification();
             Span corrContent = new Span("Верный ответ");
             Button btnCorrect = new Button("Закрыть", e -> correctNotice.close());
@@ -83,10 +87,12 @@ public class QuestionForm extends VerticalLayout {
             correctNotice.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
             correctNotice.add(corrContent, btnCorrect);
 
-            corrContent.getStyle().set("margin-right", "0.5rem");
-            btnCorrect.getStyle().set("margin-right", "0.5rem");
+            corrContent.getStyle()
+                    .set("margin-right", "0.5rem");
+            btnCorrect.getStyle()
+                    .set("margin-right", "0.5rem");
             correctNotice.open();
-        }else{
+        } else {
             Notification errNotice = new Notification();
             Span errContent = new Span("Неверный ответ");
             Button btnErrCorrect = new Button("Закрыть", e -> errNotice.close());
@@ -95,8 +101,10 @@ public class QuestionForm extends VerticalLayout {
             errNotice.addThemeVariants(NotificationVariant.LUMO_ERROR);
             errNotice.add(errContent, btnErrCorrect);
 
-            errContent.getStyle().set("margin-right", "0.5rem");
-            btnErrCorrect.getStyle().set("margin-right", "0.5rem");
+            errContent.getStyle()
+                    .set("margin-right", "0.5rem");
+            btnErrCorrect.getStyle()
+                    .set("margin-right", "0.5rem");
             errNotice.open();
         }
     }
@@ -106,8 +114,11 @@ public class QuestionForm extends VerticalLayout {
         if (ID > 190)
             ID = 1;
         radioTestOptions.setValue(null);
-        nameQuestion.setText(questionRepository.findById(ID).getId() + ". " + questionRepository.findById(ID).getQuestion());
-        radioTestOptions.setItems(questionRepository.findById(ID).getTestOptions());
+        nameQuestion.setText(questionRepository.findById(ID)
+                .getId() + ". " + questionRepository.findById(ID)
+                .getQuestion());
+        radioTestOptions.setItems(questionRepository.findById(ID)
+                .getTestOptions());
     }
 
 
@@ -120,11 +131,11 @@ public class QuestionForm extends VerticalLayout {
         radioTestOptions.setItems(questionRepository.findById(ID)
                 .getTestOptions());
 
-        radioTestOptions.addValueChangeListener(e->{
-            if(e.getValue() != null){
+        radioTestOptions.addValueChangeListener(e -> {
+            if (e.getValue() != null) {
                 btnNextQuestion.setEnabled(true);
                 btnAnswer.setEnabled(true);
-            }else {
+            } else {
                 btnNextQuestion.setEnabled(false);
                 btnAnswer.setEnabled(false);
             }
@@ -139,10 +150,11 @@ public class QuestionForm extends VerticalLayout {
         btnAnswer.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         btnAbort.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        if(radioTestOptions.getValue() == null){
+        if (radioTestOptions.getValue() == null) {
             btnNextQuestion.setEnabled(false);
             btnAnswer.setEnabled(false);
         }
-        return new HorizontalLayout(btnAnswer, btnNextQuestion, new HorizontalLayout(btnAbort));
+        
+        return new HorizontalLayout(btnAnswer, btnNextQuestion, btnAbort);
     }
 }
