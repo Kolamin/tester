@@ -8,7 +8,6 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -17,7 +16,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.anton.tester.backend.entity.Question;
 import ru.anton.tester.backend.repository.CorrectAnswerRepository;
@@ -25,7 +23,7 @@ import ru.anton.tester.backend.repository.QuestionRepository;
 
 import java.util.List;
 
-@Route(value = "question")
+@Route("question")
 @Component
 @UIScope
 @PageTitle("Tester")
@@ -43,7 +41,7 @@ public class QuestionForm extends VerticalLayout {
     Button btnNextQuestion;
     H3 nameQuestion;
     RadioButtonGroup<String> radioTestOptions;
-    private long ID = 1;
+    private static long ID = 1;
 
 
     @Autowired
@@ -64,6 +62,13 @@ public class QuestionForm extends VerticalLayout {
         btnAnswer.addClickListener(e -> getCorrectAnswer());
 
         btnAbort.addClickListener(e -> {
+            ID = 1;
+            radioTestOptions.setValue(null);
+            nameQuestion.setText(questionRepository.findById(ID)
+                    .getId() + ". " + questionRepository.findById(ID)
+                    .getQuestion());
+            radioTestOptions.setItems(questionRepository.findById(ID)
+                    .getTestOptions());
             UI.getCurrent()
                     .navigate(MainView.class);
         });

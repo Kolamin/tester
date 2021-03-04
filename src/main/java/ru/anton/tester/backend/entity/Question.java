@@ -1,14 +1,14 @@
 package ru.anton.tester.backend.entity;
 
+import ru.anton.tester.backend.service.AbstractEntity;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Question {
+public class Question extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
 
     @Column(length = 2048)
     private String question;
@@ -26,15 +26,6 @@ public class Question {
         this.testOptions = testOptions;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
     public String getQuestion() {
         return question;
     }
@@ -51,13 +42,5 @@ public class Question {
         this.testOptions = testOptions;
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", question='" + question + '\'' +
-                ", testOptions=" + testOptions +
-                '}';
-    }
 }
 

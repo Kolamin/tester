@@ -1,24 +1,17 @@
 package ru.anton.tester.backend.entity;
 
+import ru.anton.tester.backend.service.AbstractEntity;
+
 import javax.persistence.*;
 
 @Entity
-public class CorrectAnswer {
+public class CorrectAnswer extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
     @Column(length = 2048)
     private String correctAnswer;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getCorrectAnswer() {
         return correctAnswer;
@@ -35,11 +28,4 @@ public class CorrectAnswer {
         this.correctAnswer = answer;
     }
 
-    @Override
-    public String toString() {
-        return "CorrectAnswer{" +
-                "id=" + id +
-                ", correctAnswer='" + correctAnswer + '\'' +
-                '}';
-    }
 }
